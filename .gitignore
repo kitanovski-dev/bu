@@ -1,0 +1,7 @@
+vendor/
+app/tests/_log
+storage/
+composer.lock
+node_modules/
+.env
+resources/js
