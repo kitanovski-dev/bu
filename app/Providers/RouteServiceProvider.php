@@ -27,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string|null
      */
     // protected $namespace = 'App\\Http\\Controllers';
+    protected $namespace = 'App\Src\Actions';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -35,29 +36,47 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->configureRateLimiting();
-
-        $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
-
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
-        });
+        parent::boot();
     }
 
-    /**
-     * Configure the rate limiters for the application.
+     /**
+     * Define the routes for the application.
      *
      * @return void
      */
-    protected function configureRateLimiting()
+    public function map()
     {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
-        });
+        $this->mapApiV1Routes();
+        $this->mapWebRoutes();
+        //
+    }
+
+    /**
+     * Define the "web" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapWebRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiV1Routes()
+    {
+        Route::prefix('v1')
+            ->middleware('api')
+            ->namespace("$this->namespace\\V1")
+            ->group(base_path('routes/api/v1.php'));
     }
 }

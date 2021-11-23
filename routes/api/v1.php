@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/ping', function () {
+    return response()->json([
+        'pong'  =>  time()
+    ]);
 });
+
+// Public routes
+Route::group(['namespace' => 'Auth'], function () {
+    Route::post('/register', RegisterUserAction::class);
+    // Route::post('/login', LoginUserAction::class);
+});
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
