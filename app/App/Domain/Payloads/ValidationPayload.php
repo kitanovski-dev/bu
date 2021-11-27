@@ -11,11 +11,11 @@ class ValidationPayload extends Payload
     public function getData()
     {
         return [
-            'status' => "error",
-            'type' => 'validation_error',
-            'code' => $this->status,
+            'status'   => "error",
+            'type'     => 'validation_error',
+            'code'     => $this->status,
             'messages' => $this->data,
-            'data' => []
+            'data'     => []
         ];
     }
 }

@@ -14,6 +14,14 @@ abstract class AbstractResponder
 
     public function hasErrorsPayload($response)
     {
-        
+        if (
+            $response instanceof ValidationPayload ||
+            $response instanceof ErrorPayload ||
+            $response instanceof UnauthorizedPayload
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

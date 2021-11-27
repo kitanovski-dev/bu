@@ -34,8 +34,7 @@ class RegisterUserService implements ServiceInterface
             return new ErrorPayload(['message' => 'resource_not_created',], 417);
         }
         
-        // unset($data['verification_token']);
-        // $data['token'] = $data->createToken('BuApi')->accessToken;
+        unset($user['id']);
 
         return new SuccessPayload($user);
     }

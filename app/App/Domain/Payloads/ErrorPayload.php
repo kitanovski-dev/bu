@@ -11,11 +11,11 @@ class ErrorPayload extends Payload
     public function getData()
     {
         return [
-            'status' => "error",
-            'type' => 'general_error',
-            'code' => $this->status,
+            'status'   => "error",
+            'type'     => 'general_error',
+            'code'     => $this->status,
             'messages' => $this->data,
-            'data' => []
+            'data'     => []
         ];
     }
 }

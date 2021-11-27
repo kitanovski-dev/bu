@@ -23,7 +23,7 @@ Route::get('/ping', function () {
 // Public routes
 Route::group(['namespace' => 'Auth'], function () {
     Route::post('/register', RegisterUserAction::class);
-    // Route::post('/login', LoginUserAction::class);
+    Route::post('/login', LoginUserAction::class);
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
