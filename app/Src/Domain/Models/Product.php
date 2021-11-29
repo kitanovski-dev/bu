@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Src\Domain\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id'];
+
+    protected $table = 'product';
+
+    public function order() {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function productSupplierOrder() {
+        return $this->hasOne(ProductSupplierOrder::class);
+    }
+}
