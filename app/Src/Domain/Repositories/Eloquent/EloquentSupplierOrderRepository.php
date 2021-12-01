@@ -14,6 +14,6 @@ class EloquentSupplierOrderRepository extends AbstractRepository
 
     public function create($data)
     {
-        
+       return $this->entity->create($data);
     }
 }

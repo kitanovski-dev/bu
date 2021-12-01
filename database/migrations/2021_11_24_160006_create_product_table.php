@@ -17,6 +17,7 @@ class CreateProductTable extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->string('type',100);
+            $table->string('supplier',100);
             $table->json('data');
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('order');

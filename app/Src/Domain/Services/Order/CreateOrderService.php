@@ -28,7 +28,7 @@ class CreateOrderService
         $this->customer = $customer;
         $this->status   = $status;
         $this->product  = $product;
-        $this->supplier  = $supplier;
+        $this->supplier = $supplier;
     }  
 
     public function handle($data = [])
@@ -42,7 +42,7 @@ class CreateOrderService
         $customerData['order_id'] = $order->id;
 
         $customer  = $this->customer->create($customerData);
-
+        // return $customer;
 
         /** Write in status table - PENDING*/
         $status  = $this->status->create($order->id);
@@ -52,21 +52,33 @@ class CreateOrderService
         $productsData = $data->products;
         $productsData['order_id'] = $order->id;
 
-        $product = $this->product->create($productsData);
+        $addInProduct = $this->product->create($productsData);
         
-        // return $customer;
+        
+        // $products =  $this->product->findWhere('order_id', $order->id);
+        // return $products;
 
-        $createOrder = $this->createOrder($customer, $product);
+        $createOrder = $this->createOrder($customer, $addInProduct);
+        // $cancelOrder = $this->cancelOrder('16507710');
          
         return $createOrder;
         
     }
 
-    protected function createOrder($customer, $product)
+    protected function createOrder($customer, $products)
     {
-        $ordered = $this->supplier->createOrder($customer, $product);
+        foreach ($products as $product) {
+            $ordered = $this->supplier->createOrder($customer, $product);
+        }
         
         return $ordered;
+    }
+
+    protected function cancelOrder($resId)
+    {
+        $canceled = $this->supplier->cancelOrder($resId);
+        
+        return $canceled;
     }
 
 }

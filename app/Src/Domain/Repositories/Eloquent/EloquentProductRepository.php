@@ -20,16 +20,17 @@ class EloquentProductRepository extends AbstractRepository
         unset($data['order_id']);
 
         foreach ($data as $product) {
-            $product1 = [
+            $productData = [
                 'order_id' => $orderId,
                 'type'     => $product['type'],
+                'supplier' => $product['data']['supplier'],
                 'data'     => json_encode($product['data']),
             ];
             
             $allProducts[] = array($product['data']);
-            $this->entity->create($product1);
+            $this->entity->create($productData);
         }
 
-        return $allProducts;
+        return array_column($allProducts, 0);
     }
 }

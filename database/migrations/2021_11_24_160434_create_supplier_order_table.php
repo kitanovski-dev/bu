@@ -17,7 +17,7 @@ class CreateSupplierOrderTable extends Migration
             $table->id();
             $table->string('request_type',50);
             $table->string('service_provider',255);
-            $table->string('reservation_id',255);
+            $table->string('reservation_id',255)->nullable();
             $table->timestamps();
         });
     }

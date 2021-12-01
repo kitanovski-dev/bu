@@ -4,20 +4,23 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class OpenGdsServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      *
      * @return void
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            'App\App\Domain\Suppiers\SupplierInterface',
+            'App\App\Domain\Suppiers\OpenGDS\OpenGds'
+        );
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      *
      * @return void
      */
