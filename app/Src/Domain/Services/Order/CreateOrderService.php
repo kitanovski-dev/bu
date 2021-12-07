@@ -33,35 +33,57 @@ class CreateOrderService
 
     public function handle($data = [])
     {
-        /** Write in order table */
-        $order = $this->order->create($data);
+        /** Validate data ================================================= */
+        // if (($validator = $this->validate($data))->fails()) {
+        //     return new ValidationPayload($validator->getData());
+        // }
+         //  VALIDATOR WILL BE IMPROVED
+        /** =============================================================== */
+
+        try {
+
+            /** Write in order table ======================================= */
+            $order = $this->order->create($data);
+            /** ============================================================ */
+
+            
+            /** Write in customer table ==================================== */
+            $customerData = $data->customers;
+            $customerData['order_id'] = $order->id;
+
+            $customer  = $this->customer->create($customerData);
+            /** ============================================================ */
+
+
+            /** Write in status table - PENDING============================= */
+            $status  = $this->status->create($order->id);
+            /** ============================================================ */
 
         
-        /** Write in customer table */
-        $customerData = $data->customers;
-        $customerData['order_id'] = $order->id;
+            /** Write in product table ===================================== */
+            $productsData = $data->products;
+            $productsData['order_id'] = $order->id;
 
-        $customer  = $this->customer->create($customerData);
-        // return $customer;
+            $products = $this->product->create($productsData);
+            /** ============================================================ */
 
-        /** Write in status table - PENDING*/
-        $status  = $this->status->create($order->id);
-
-
-        /** Write in product table */
-        $productsData = $data->products;
-        $productsData['order_id'] = $order->id;
-
-        $addInProduct = $this->product->create($productsData);
         
-        
-        // $products =  $this->product->findWhere('order_id', $order->id);
-        // return $products;
+            /** Create an order to Supplier ================================ */
+            $createOrder = $this->createOrder($customer, $products);
+            /** ============================================================ */
+            
+            return $createOrder; 
 
-        $createOrder = $this->createOrder($customer, $addInProduct);
-        // $cancelOrder = $this->cancelOrder('16507710');
-         
-        return $createOrder;
+            /** instead of this return we will use class SuccessPayload 
+             *  (namespace App\App\Domain\Payloads);
+             * 
+             * you can find an example in Src\Domain\Services\Auth\RegisterUserService -
+             * that will be similar
+             */ 
+
+        } catch (\Exception $e) {
+            // In this section I will integrate handlers for Errors
+        }
         
     }
 
@@ -79,6 +101,22 @@ class CreateOrderService
         $canceled = $this->supplier->cancelOrder($resId);
         
         return $canceled;
+    }
+
+    protected function validate($data)
+    {
+        return validator($data, [
+            'orderNumber'                       => 'required|string',
+            'customers'                         => 'required|array',
+            'products.*'                        => 'required|array',
+            'products.*.type'                   => 'required|string',
+            'products.*.data'                   => 'required|array',
+            'products.*.data.ratePlanCode'      => 'required|string',
+            'products.*.data.accommodationCode' => 'required|string',
+            'products.*.data.arrivalDate'       => 'required|date|before:products.*.data.departureDate',
+            'products.*.data.departureDate'     => 'required|date|after:products.*.data.arrivalDate',
+            'products.*.data.landlordCode'      => 'required',
+        ]);
     }
 
 }

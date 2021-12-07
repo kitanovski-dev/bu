@@ -27,8 +27,9 @@ class EloquentProductRepository extends AbstractRepository
                 'data'     => json_encode($product['data']),
             ];
             
+            $products = $this->entity->create($productData);
+            $product['data']['product_id'] = $products['id'];
             $allProducts[] = array($product['data']);
-            $this->entity->create($productData);
         }
 
         return array_column($allProducts, 0);

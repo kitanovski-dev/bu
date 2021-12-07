@@ -30,9 +30,6 @@ Route::group(['namespace' => 'Auth'], function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['namespace' => 'Order'], function () {
         Route::post('/order', CreateOrderAction::class);
+        Route::post('/cancel', CreateOrderAction::class);
     });
 });
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

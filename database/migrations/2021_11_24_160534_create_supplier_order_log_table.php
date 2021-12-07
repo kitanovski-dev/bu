@@ -17,8 +17,8 @@ class CreateSupplierOrderLogTable extends Migration
             $table->id();
             $table->unsignedBigInteger('supplier_order_id');
             $table->json('request');
-            $table->json('response');
-            $table->string('status',30);
+            $table->json('response')->nullable();
+            $table->boolean('status',30);
             $table->foreign('supplier_order_id')->references('id')->on('supplier_order');
             $table->timestamps();
         });

@@ -9,6 +9,8 @@ class ProductSupplierOrder extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $table = 'product_supplier_order';
 
     public function product() {

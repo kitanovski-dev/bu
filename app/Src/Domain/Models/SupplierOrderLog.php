@@ -9,6 +9,8 @@ class SupplierOrderLog extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $table = 'supplier_order_log';
 
     public function supplierOrder() {
